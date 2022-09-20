@@ -22,8 +22,12 @@ namespace Xbim.BCF
 		/// A collection of Topics contained within the BCF
 		/// </summary>
 		public List<Topic> Topics;
+        /// <summary>
+        /// A collection of IfcProjects contained within the BCF
+        /// </summary>
+        public List<String> IfcProjects;
 
-		public BCF()
+        public BCF()
 		{
 			Topics = new List<Topic>();
 		}
@@ -39,6 +43,8 @@ namespace Xbim.BCF
 			Topic currentTopic = null;
 			Guid currentGuid = Guid.Empty;
 			ZipArchive archive = new ZipArchive(BCFZipData);
+            Dictionary<Guid, Topic> FileTopics = new Dictionary<Guid, Topic>();
+            Dictionary<String, BCFFile> IfcProjectFiles = new Dictionary<String, BCFFile>();
 			foreach (ZipArchiveEntry entry in archive.Entries)
 			{
 				if (entry.FullName.EndsWith(".bcfp", StringComparison.OrdinalIgnoreCase))
@@ -61,17 +67,29 @@ namespace Xbim.BCF
 							}
 							currentGuid = entry.ExtractGuidFolderName();
 							currentTopic = new Topic();
-						}
-						currentTopic.Markup = new MarkupXMLFile(XDocument.Load(entry.Open()));
+                            FileTopics.Add(currentGuid, currentTopic);
 
-					} catch
+                        }
+						currentTopic.Markup = new MarkupXMLFile(XDocument.Load(entry.Open()));
+                        foreach(BCFFile file in currentTopic.Markup.Header.Files)
+                        {
+                            if (IfcProjectFiles.ContainsKey(file.IfcProject)) { continue; }
+                            IfcProjectFiles.Add(file.IfcProject, file);
+                        }
+
+
+					} catch(Exception e)
 					{
-						Console.WriteLine("Error adding markup");
+						Console.WriteLine("Error adding markup", e);
 					}
 				}
 				else if (entry.FullName.EndsWith(".bcfv", StringComparison.OrdinalIgnoreCase))
 				{
-					if (entry.ExtractGuidFolderName() != currentGuid)
+                    if (entry.ExtractGuidFolderName() != currentGuid && FileTopics.ContainsKey(entry.ExtractGuidFolderName())) {
+                        currentGuid = entry.ExtractGuidFolderName();
+                        currentTopic = FileTopics[currentGuid];
+                    }
+                    else if (entry.ExtractGuidFolderName() != currentGuid)
 					{
 						if (currentTopic != null)
 						{
@@ -79,7 +97,8 @@ namespace Xbim.BCF
 						}
 						currentGuid = entry.ExtractGuidFolderName();
 						currentTopic = new Topic();
-					}
+                        FileTopics.Add(currentGuid, currentTopic);
+                    }
 					try
 					{
 						currentTopic.Visualization = new VisualizationXMLFile(XDocument.Load(entry.Open()));
@@ -92,7 +111,12 @@ namespace Xbim.BCF
 					|| entry.FullName.EndsWith(".jpeg", StringComparison.OrdinalIgnoreCase)
 					|| entry.FullName.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase))
 				{
-					if (entry.ExtractGuidFolderName() != currentGuid)
+                    if (entry.ExtractGuidFolderName() != currentGuid && FileTopics.ContainsKey(entry.ExtractGuidFolderName()))
+                    {
+                        currentGuid = entry.ExtractGuidFolderName();
+                        currentTopic = FileTopics[currentGuid];
+                    }
+                    else if(entry.ExtractGuidFolderName() != currentGuid)
 					{
 						if (currentTopic != null)
 						{
@@ -100,7 +124,8 @@ namespace Xbim.BCF
 						}
 						currentGuid = entry.ExtractGuidFolderName();
 						currentTopic = new Topic();
-					}
+                        FileTopics.Add(currentGuid, currentTopic);
+                    }
 					try
 					{
 						using (MemoryStream ms = new MemoryStream())
@@ -118,6 +143,9 @@ namespace Xbim.BCF
 			{
 				bcf.Topics.Add(currentTopic);
 			}
+
+            bcf.IfcProjects = new List<string>(IfcProjectFiles.Keys);
+
 			return bcf;
 		}
 

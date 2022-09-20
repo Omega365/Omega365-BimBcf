@@ -1,7 +1,8 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\Xbim.BCF.Tests"
   ],
-  "SelectedNode": "\\README.md",
+  "SelectedNode": "\\Xbim.BCF.Tests\\Xbim.BCF.Tests.csproj",
   "PreviewInSolutionExplorer": false
 }

@@ -207,7 +207,7 @@ namespace Xbim.BCF.XMLNodes
             ModifiedDate = ParseDateTimeFromXMLNodeElement(node, "ModifiedDate");
             ModifiedAuthor = (String)node.Element("ModifiedAuthor") ?? "";
             AssignedTo = (String)node.Element("AssignedTo") ?? "";
-            TopicStatus = (String)node.Element("TopicStatus") ?? "";
+            TopicStatus = (String)node.Element("TopicStatus") ?? (String)node.Attribute("TopicStatus") ?? "";
             DueDate = ParseDateTimeFromXMLNodeElement(node, "DueDate");
 
             var bimSnippet = node.Elements("BimSnippet").FirstOrDefault();

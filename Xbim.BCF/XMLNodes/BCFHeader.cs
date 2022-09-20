@@ -17,10 +17,9 @@ namespace Xbim.BCF.XMLNodes
 
         public BCFHeader(XElement node)
         {
+            Files = new List<BCFFile>();
             if (node != null)
             {
-                Files = new List<BCFFile>();
-
                 foreach (var file in node.Elements("File"))
                 {
                     Files.Add(new BCFFile(file));
