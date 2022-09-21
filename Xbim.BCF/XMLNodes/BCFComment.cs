@@ -199,7 +199,7 @@ namespace Xbim.BCF.XMLNodes
                 ReplyToComment = new AttrIDNode(node.Element("ReplyToComment"));
             }
             var viewp = node.Elements("Viewpoint").FirstOrDefault();
-            if (viewp != null)
+            if (viewp != null && viewp.Attribute("Guid") != null )
             {
                 Viewpoint = new AttrIDNode(node.Element("Viewpoint"));
             }

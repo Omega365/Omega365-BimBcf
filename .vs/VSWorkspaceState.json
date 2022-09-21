@@ -1,8 +1,10 @@
 {
   "ExpandedNodes": [
     "",
-    "\\Xbim.BCF.Tests"
+    "\\Xbim.BCF",
+    "\\Xbim.BCF\\Properties",
+    "\\Xbim.BCF\\XMLNodes"
   ],
-  "SelectedNode": "\\Xbim.BCF.Tests\\Xbim.BCF.Tests.csproj",
+  "SelectedNode": "\\Xbim.BCF\\VisualizationXMLFile.cs",
   "PreviewInSolutionExplorer": false
 }
