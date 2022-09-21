@@ -91,10 +91,6 @@ namespace Xbim.BCF
                     }
                     else if (entry.ExtractGuidFolderName() != currentGuid)
 					{
-						if (currentTopic != null)
-						{
-							bcf.Topics.Add(currentTopic);
-						}
 						currentGuid = entry.ExtractGuidFolderName();
 						currentTopic = new Topic();
                         FileTopics.Add(currentGuid, currentTopic);
@@ -118,10 +114,6 @@ namespace Xbim.BCF
                     }
                     else if(entry.ExtractGuidFolderName() != currentGuid)
 					{
-						if (currentTopic != null)
-						{
-							bcf.Topics.Add(currentTopic);
-						}
 						currentGuid = entry.ExtractGuidFolderName();
 						currentTopic = new Topic();
                         FileTopics.Add(currentGuid, currentTopic);
@@ -139,11 +131,8 @@ namespace Xbim.BCF
 					}
 				}
 			}
-			if (currentTopic != null)
-			{
-				bcf.Topics.Add(currentTopic);
-			}
 
+			bcf.Topics = new List<Topic>(FileTopics.Values);
             bcf.IfcProjects = new List<string>(IfcProjectFiles.Keys);
 
 			return bcf;
