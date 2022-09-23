@@ -36,7 +36,7 @@ namespace Xbim.BCF
             Lines = new List<BCFLine>();
             ClippingPlanes = new List<BCFClippingPlane>();
             Bitmaps = new List<BCFBitmap>();
-
+            
             var orth = xdoc.Root.Elements("OrthogonalCamera").FirstOrDefault();
             if (orth != null)
             {
@@ -48,6 +48,11 @@ namespace Xbim.BCF
                 PerspectiveCamera = new BCFPerspectiveCamera(pers);
             }
             foreach (var comp in xdoc.Root.Element("Components").Elements("Component"))
+            {
+                Components.Add(new BCFComponent(comp));
+
+            }
+            foreach (var comp in xdoc.Root.Element("Components").Element("Selection").Elements("Component"))
             {
                 Components.Add(new BCFComponent(comp));
             }

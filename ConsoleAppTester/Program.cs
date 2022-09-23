@@ -16,7 +16,7 @@ namespace ConsoleAppTester
             // C:\\Users\\Nicolai.Stensland\\Documents\\BIM_Documents\\o365\\22-09-02 Fundament bygg nord.bcf
             // C:\\Users\\Nicolai.Stensland\\Documents\\BIM_Documents\\o365\\NYKO_ARK_TEST.bcf
 
-            byte[] fileBytes = File.ReadAllBytes("C:\\Users\\Nicolai.Stensland\\Documents\\BIM_Documents\\o365\\22-09-02 Fundament bygg nord.bcf");
+            byte[] fileBytes = File.ReadAllBytes("C:\\Users\\Nicolai.Stensland\\Documents\\BIM_Documents\\o365\\NYKO_ARK_TEST.bcf");
             Stream stream = new MemoryStream(fileBytes);
 
             var bcf = BCF.Deserialize(stream);
