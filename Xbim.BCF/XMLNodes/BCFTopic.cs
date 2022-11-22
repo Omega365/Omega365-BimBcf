@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 
@@ -168,7 +169,6 @@ namespace Xbim.BCF.XMLNodes
         {
             return RelatedTopics != null && RelatedTopics.Count > 0;
         }
-
         /// <summary>
         /// Date when the topic is due
         /// </summary>
@@ -177,6 +177,15 @@ namespace Xbim.BCF.XMLNodes
         public bool ShouldSerializeDueDate()
         {
             return DueDate != null;
+        }
+        /// <summary>
+        /// Labels of the topic
+        /// </summary>
+        [XmlElement(Order = 16)]
+        public List<string> Labels { get; set; }
+        public bool ShouldSerializeLabels()
+        {
+            return Labels.Count != 0;
         }
 
         private BCFTopic()
@@ -209,6 +218,7 @@ namespace Xbim.BCF.XMLNodes
             AssignedTo = (String)node.Element("AssignedTo") ?? "";
             TopicStatus = (String)node.Element("TopicStatus") ?? (String)node.Attribute("TopicStatus") ?? "";
             DueDate = ParseDateTimeFromXMLNodeElement(node, "DueDate");
+            Labels = node.Elements("Labels").DescendantNodes().Select(el => el.ToString()).ToList();
 
             var bimSnippet = node.Elements("BimSnippet").FirstOrDefault();
             if (bimSnippet != null)
