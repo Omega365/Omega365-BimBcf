@@ -3,6 +3,7 @@ using System.Xml.Linq;
 using System.Linq;
 using System.Xml.Serialization;
 using Xbim.BCF.XMLNodes;
+using System;
 
 namespace Xbim.BCF
 {
@@ -52,9 +53,13 @@ namespace Xbim.BCF
                 Components.Add(new BCFComponent(comp));
 
             }
-            foreach (var comp in xdoc.Root.Element("Components").Element("Selection").Elements("Component"))
+            System.Xml.Linq.XElement selection = xdoc.Root.Element("Components").Element("Selection");
+            if (selection != null)
             {
-                Components.Add(new BCFComponent(comp));
+                foreach (var comp in selection.Elements("Component"))
+                {
+                    Components.Add(new BCFComponent(comp));
+                }
             }
             var lines = xdoc.Root.Elements("Lines").FirstOrDefault();
             if (lines != null)

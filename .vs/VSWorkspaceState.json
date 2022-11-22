@@ -3,9 +3,8 @@
     "",
     "\\ConsoleAppTester",
     "\\Xbim.BCF",
-    "\\Xbim.BCF\\Properties",
     "\\Xbim.BCF\\XMLNodes"
   ],
-  "SelectedNode": "\\Xbim.BCF",
+  "SelectedNode": "\\ConsoleAppTester",
   "PreviewInSolutionExplorer": false
 }
