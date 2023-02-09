@@ -10,8 +10,8 @@ namespace Xbim.BCF
     [XmlType("VisualizationInfo")]
     public class VisualizationXMLFile
     {
-        [XmlArray(Order = 1)]
-        public List<BCFComponent> Components;
+        [XmlElement(Order = 1)]
+        public BCFComponents Components;
         [XmlElement(Order = 2)]
         public BCFOrthogonalCamera OrthogonalCamera { get; set; }
         [XmlElement(Order = 3)]
@@ -25,7 +25,7 @@ namespace Xbim.BCF
 
         public VisualizationXMLFile()
         {
-            Components = new List<BCFComponent>();
+            Components = new BCFComponents();
             Lines = new List<BCFLine>();
             ClippingPlanes = new List<BCFClippingPlane>();
             Bitmaps = new List<BCFBitmap>();
@@ -33,7 +33,7 @@ namespace Xbim.BCF
 
         public VisualizationXMLFile(XDocument xdoc)
         {
-            Components = new List<BCFComponent>();
+            var selectedComponents = new List<BCFSelection>();
             Lines = new List<BCFLine>();
             ClippingPlanes = new List<BCFClippingPlane>();
             Bitmaps = new List<BCFBitmap>();
@@ -48,19 +48,15 @@ namespace Xbim.BCF
             {
                 PerspectiveCamera = new BCFPerspectiveCamera(pers);
             }
-            foreach (var comp in xdoc.Root.Element("Components").Elements("Component"))
+            System.Xml.Linq.XElement selComps = xdoc.Root.Element("Components").Element("Selection");
+            if (selComps != null)
             {
-                Components.Add(new BCFComponent(comp));
-
-            }
-            System.Xml.Linq.XElement selection = xdoc.Root.Element("Components").Element("Selection");
-            if (selection != null)
-            {
-                foreach (var comp in selection.Elements("Component"))
+                foreach (var comp in selComps.Elements("Component"))
                 {
-                    Components.Add(new BCFComponent(comp));
+                    selectedComponents.Add(new BCFSelection(comp));
                 }
             }
+            Components = new BCFComponents(selectedComponents);
             var lines = xdoc.Root.Elements("Lines").FirstOrDefault();
             if (lines != null)
             {

@@ -65,13 +65,13 @@
     <Compile Include="Vector.cs" />
     <Compile Include="VersionXMLFile.cs" />
     <Compile Include="VisualizationXMLFile.cs" />
+    <Compile Include="XMLNodes\BCFComponent.cs" />
     <Compile Include="ZipArchiveEntryExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="XMLNodes\BCFBimSnippet.cs" />
     <Compile Include="XMLNodes\BCFBitmap.cs" />
     <Compile Include="XMLNodes\BCFClippingPlane.cs" />
     <Compile Include="XMLNodes\BCFComment.cs" />
-    <Compile Include="XMLNodes\BCFComponent.cs" />
     <Compile Include="XMLNodes\BCFDocumentReference.cs" />
     <Compile Include="XMLNodes\BCFFile.cs" />
     <Compile Include="XMLNodes\BCFHeader.cs" />

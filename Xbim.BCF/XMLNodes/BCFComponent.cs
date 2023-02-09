@@ -9,23 +9,6 @@ namespace Xbim.BCF.XMLNodes
     [XmlType("Component")]
     public class BCFComponent
     {
-        private String _color;
-        /// <summary>
-        /// Color of the component. This can be used to provide special highlighting of components in the viewpoint. The color is given in ARGB format
-        /// </summary>
-        [XmlAttribute]
-        public String Color
-        {
-            get { return _color; }
-            set
-            {
-                _color = value ?? "#7F00ff00";
-            }
-        }
-        public bool ShouldSerializeColor()
-        {
-            return !string.IsNullOrEmpty(Color);
-        }
         private String _ifcGuid;
         /// <summary>
         /// The id of the component selected in a BIM tool
@@ -71,15 +54,6 @@ namespace Xbim.BCF.XMLNodes
         /// <summary>
         /// This flag is true if the component is actually involved in the topic. If the flag is false, the component is involved as reference
         /// </summary>
-        [XmlAttribute]
-        public bool Selected { get; set; }
-        /// <summary>
-        /// This flag is true when the component is visible in the visualization. 
-        /// By setting this false, you can hide components that would prevent seeing the topic from the camera position and angle of the viewpoint.
-        /// Default is true.
-        /// </summary>
-        [XmlAttribute]
-        public bool Visible { get; set; }
 
         public BCFComponent()
         { }
@@ -87,9 +61,6 @@ namespace Xbim.BCF.XMLNodes
         public BCFComponent(XElement node)
         {
             IfcGuid = (String)node.Attribute("IfcGuid") ?? "";
-            Visible = (bool?)node.Attribute("Visible") ?? true;
-            Selected = (bool?)node.Attribute("Selected") ?? false;
-            Color = (String)node.Attribute("Color") ?? "";
             OriginatingSystem = (String)node.Element("OriginatingSystem") ?? "";
             AuthoringToolId = (String)node.Element("AuthoringToolId") ?? "";
         }
@@ -107,6 +78,44 @@ namespace Xbim.BCF.XMLNodes
                     return false;
             }
             return true;
+        }
+    }
+    public class BCFSelection : BCFComponent
+    {
+        [XmlAttribute]
+        public bool Selected { get; set; }
+        /// <summary>
+        /// This flag is true when the component is visible in the visualization. 
+        /// By setting this false, you can hide components that would prevent seeing the topic from the camera position and angle of the viewpoint.
+        /// Default is true.
+        /// </summary>
+
+        public BCFSelection()
+        { }
+
+        public BCFSelection(XElement node) : base(node)
+        {
+            Selected = true;
+        }
+    }
+
+    [XmlType("Components")]
+
+    public class BCFComponents
+    {
+        private List<BCFSelection> _selection;
+        public List<BCFSelection> Selection
+        {
+            get { return _selection; } 
+            set { _selection = value; }
+        }
+
+        public BCFComponents() 
+        { }
+
+        public BCFComponents(List<BCFSelection> selection) 
+        {
+            Selection = selection;
         }
     }
 }
