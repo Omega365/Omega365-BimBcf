@@ -33,7 +33,6 @@ namespace Xbim.BCF
 
         public VisualizationXMLFile(XDocument xdoc)
         {
-            var selectedComponents = new List<BCFSelection>();
             Lines = new List<BCFLine>();
             ClippingPlanes = new List<BCFClippingPlane>();
             Bitmaps = new List<BCFBitmap>();
@@ -48,15 +47,27 @@ namespace Xbim.BCF
             {
                 PerspectiveCamera = new BCFPerspectiveCamera(pers);
             }
-            System.Xml.Linq.XElement selComps = xdoc.Root.Element("Components").Element("Selection");
-            if (selComps != null)
+
+            var selection = new List<BCFSelection>();
+            System.Xml.Linq.XElement sels = xdoc.Root.Element("Components").Element("Selection");
+            if (sels != null)
             {
-                foreach (var comp in selComps.Elements("Component"))
+                foreach (var sel in sels.Elements("Component"))
                 {
-                    selectedComponents.Add(new BCFSelection(comp));
+                    selection.Add(new BCFSelection(sel));
                 }
             }
-            Components = new BCFComponents(selectedComponents);
+            var visibility = new List<BCFVisibility>();
+            System.Xml.Linq.XElement viss = xdoc.Root.Element("Components").Element("Visibility").Element("Exceptions");
+            if (viss != null)
+            {
+                foreach (var vis in viss.Elements("Component"))
+                {
+                    visibility.Add(new BCFVisibility(vis));
+                }
+            }
+            Components = new BCFComponents(selection, visibility);
+            
             var lines = xdoc.Root.Elements("Lines").FirstOrDefault();
             if (lines != null)
             {

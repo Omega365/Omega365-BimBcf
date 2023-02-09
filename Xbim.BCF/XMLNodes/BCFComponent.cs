@@ -99,6 +99,26 @@ namespace Xbim.BCF.XMLNodes
         }
     }
 
+    public class BCFVisibility : BCFComponent
+    {
+        [XmlAttribute]
+        public bool Visibility { get; set; }
+        /// <summary>
+        /// This flag is true when the component is visible in the visualization. 
+        /// By setting this false, you can hide components that would prevent seeing the topic from the camera position and angle of the viewpoint.
+        /// Default is true.
+        /// </summary>
+
+        public BCFVisibility()
+        { }
+
+        public BCFVisibility(XElement node) : base(node)
+        {
+            bool defaultVisibility = (bool)node.Parent.Parent.Attribute("DefaultVisibility");
+            Visibility = !defaultVisibility;
+        }
+    }
+
     [XmlType("Components")]
 
     public class BCFComponents
@@ -110,12 +130,20 @@ namespace Xbim.BCF.XMLNodes
             set { _selection = value; }
         }
 
+        private List<BCFVisibility> _visibility;
+        public List<BCFVisibility> Visibility
+        {
+            get { return _visibility; }
+            set { _visibility = value; }
+        }
+
         public BCFComponents() 
         { }
 
-        public BCFComponents(List<BCFSelection> selection) 
+        public BCFComponents(List<BCFSelection> selection, List<BCFVisibility> visibility) 
         {
             Selection = selection;
+            Visibility = visibility;
         }
     }
 }
