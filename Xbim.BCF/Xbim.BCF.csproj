@@ -59,6 +59,7 @@
     </Compile>
     <Compile Include="AttrIDNode.cs" />
     <Compile Include="BCF.cs" />
+    <Compile Include="IfcGuidConverter.cs" />
     <Compile Include="MarkupXMLFile.cs" />
     <Compile Include="ProjectXMLFile.cs" />
     <Compile Include="Topic.cs" />

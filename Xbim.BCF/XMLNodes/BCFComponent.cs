@@ -9,6 +9,25 @@ namespace Xbim.BCF.XMLNodes
     [XmlType("Component")]
     public class BCFComponent
     {
+
+        private String _color;
+        /// <summary>
+        /// Color of the component. This can be used to provide special highlighting of components in the viewpoint. The color is given in ARGB format
+        /// </summary>
+        [XmlAttribute]
+        public String Color
+        {
+            get { return _color; }
+            set
+            {
+                _color = value ?? "#7F00ff00";
+            }
+        }
+        public bool ShouldSerializeColor()
+        {
+            return !string.IsNullOrEmpty(Color);
+        }
+
         private String _ifcGuid;
         /// <summary>
         /// The id of the component selected in a BIM tool
@@ -22,6 +41,7 @@ namespace Xbim.BCF.XMLNodes
                 if (value.Length == 22)
                 {
                     _ifcGuid = value;
+                    _ifcGuidConverted = IfcGuidConverter.FromIfcGuid(value);
                 }
                 else
                 {
@@ -33,6 +53,33 @@ namespace Xbim.BCF.XMLNodes
         {
             return !string.IsNullOrEmpty(IfcGuid);
         }
+
+        private Guid _ifcGuidConverted;
+        /// <summary>
+        /// The id of the component selected in a BIM tool (As System.Guid)
+        /// </summary>
+        [XmlAttribute]
+        public Guid IfcGuidConverted
+        {
+            get { return _ifcGuidConverted; }
+            set
+            {
+                if (value.ToString().Length == 36)
+                {
+                    _ifcGuidConverted = value;
+                    _ifcGuid = IfcGuidConverter.ToIfcGuid(value);
+                }
+                else
+                {
+                    throw new ArgumentException(this.GetType().Name + " - IfcGuidConverted - IfcGuidConverted must be 36 chars exactly");
+                }
+            }
+        }
+        public bool ShouldSerializeIfcGuidConverted()
+        {
+            return !string.IsNullOrEmpty(IfcGuidConverted.ToString());
+        }
+
         /// <summary>
         /// Name of the system in which the component is originated
         /// </summary>
@@ -63,6 +110,7 @@ namespace Xbim.BCF.XMLNodes
             IfcGuid = (String)node.Attribute("IfcGuid") ?? "";
             OriginatingSystem = (String)node.Element("OriginatingSystem") ?? "";
             AuthoringToolId = (String)node.Element("AuthoringToolId") ?? "";
+            Color = (String)node.Attribute("Color") ?? "";
         }
 
         private bool IsHex(IEnumerable<char> chars)

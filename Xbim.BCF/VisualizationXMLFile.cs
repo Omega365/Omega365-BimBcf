@@ -48,24 +48,35 @@ namespace Xbim.BCF
                 PerspectiveCamera = new BCFPerspectiveCamera(pers);
             }
 
+
             var selection = new List<BCFSelection>();
-            System.Xml.Linq.XElement sels = xdoc.Root.Element("Components").Element("Selection");
-            if (sels != null)
-            {
-                foreach (var sel in sels.Elements("Component"))
-                {
-                    selection.Add(new BCFSelection(sel));
-                }
-            }
             var visibility = new List<BCFVisibility>();
-            System.Xml.Linq.XElement viss = xdoc.Root.Element("Components").Element("Visibility").Element("Exceptions");
-            if (viss != null)
+            
+            System.Xml.Linq.XElement componentElements = xdoc.Root.Element("Components");
+            if (componentElements != null)
             {
-                foreach (var vis in viss.Elements("Component"))
+                System.Xml.Linq.XElement selectionElements = componentElements.Element("Selection");
+                if (selectionElements != null)
                 {
-                    visibility.Add(new BCFVisibility(vis));
+                    foreach (var element in selectionElements.Elements("Component"))
+                    {
+                        selection.Add(new BCFSelection(element));
+                    }
+                }
+                System.Xml.Linq.XElement visibilityElements = componentElements.Element("Visibility");
+                if (visibilityElements != null)
+                {
+                    System.Xml.Linq.XElement exceptionElements = visibilityElements.Element("Exceptions");
+                    if (exceptionElements != null)
+                    {
+                        foreach (var element in exceptionElements.Elements("Component"))
+                        {
+                            visibility.Add(new BCFVisibility(element));
+                        }
+                    }
                 }
             }
+
             Components = new BCFComponents(selection, visibility);
             
             var lines = xdoc.Root.Elements("Lines").FirstOrDefault();

@@ -167,15 +167,21 @@ namespace Xbim.BCF.Tests
             xmlObj.ClippingPlanes.Add(cp);
             xmlObj.ClippingPlanes.Add(cp);
 
-            BCFComponent c = new BCFComponent();
-            c.AuthoringToolId = "testAuthoringToolID";
-            c.Color = "7FFFFFFF";
-            c.IfcGuid = "IfcGuid______________1";
-            c.OriginatingSystem = "testOriginatingSystem";
-            c.Selected = true;
-            c.Visible = true;
-            xmlObj.Components.Add(c);
-            xmlObj.Components.Add(c);
+            BCFSelection s = new BCFSelection();
+            s.AuthoringToolId = "testAuthoringToolID";
+            s.Color = "7FFFFFFF";
+            s.IfcGuid = "IfcGuid______________1";
+            s.OriginatingSystem = "testOriginatingSystem";
+            xmlObj.Components.Selection.Add(s);
+            xmlObj.Components.Selection.Add(s);
+
+            BCFVisibility v = new BCFVisibility();
+            v.AuthoringToolId = "testAuthoringToolID";
+            v.Color = "7FFFFFFF";
+            v.IfcGuid = "IfcGuid______________1";
+            v.OriginatingSystem = "testOriginatingSystem";
+            xmlObj.Components.Visibility.Add(v);
+            xmlObj.Components.Visibility.Add(v);
 
             BCFLine l = new BCFLine(testVector, testVector);
             xmlObj.Lines.Add(l);

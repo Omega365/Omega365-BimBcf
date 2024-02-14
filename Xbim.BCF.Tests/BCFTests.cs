@@ -106,14 +106,20 @@ namespace Xbim.BCF.Tests
             Assert.IsTrue(xmlObj.ClippingPlanes.Count > 0);
             Assert.IsNotNull(xmlObj.ClippingPlanes[0].Direction);
             Assert.IsNotNull(xmlObj.ClippingPlanes[0].Location);
-            //Components
-            Assert.IsTrue(xmlObj.Components.Count > 0);
-            Assert.IsNotNull(xmlObj.Components[0].AuthoringToolId);
-            Assert.IsNotNull(xmlObj.Components[0].Color);
-            Assert.IsNotNull(xmlObj.Components[0].IfcGuid);
-            Assert.IsNotNull(xmlObj.Components[0].OriginatingSystem);
-            Assert.IsNotNull(xmlObj.Components[0].Selected);
-            Assert.IsNotNull(xmlObj.Components[0].Visible);
+            // Selection Components
+            Assert.IsTrue(xmlObj.Components.Selection.Count > 0);
+            Assert.IsNotNull(xmlObj.Components.Selection[0].AuthoringToolId);
+            Assert.IsNotNull(xmlObj.Components.Selection[0].Color);
+            Assert.IsNotNull(xmlObj.Components.Selection[0].IfcGuid);
+            Assert.IsNotNull(xmlObj.Components.Selection[0].OriginatingSystem);
+            Assert.IsNotNull(xmlObj.Components.Selection[0].Selected);
+            // Visibility Components
+            Assert.IsTrue(xmlObj.Components.Visibility.Count > 0);
+            Assert.IsNotNull(xmlObj.Components.Visibility[0].AuthoringToolId);
+            Assert.IsNotNull(xmlObj.Components.Visibility[0].Color);
+            Assert.IsNotNull(xmlObj.Components.Visibility[0].IfcGuid);
+            Assert.IsNotNull(xmlObj.Components.Visibility[0].OriginatingSystem);
+            Assert.IsNotNull(xmlObj.Components.Visibility[0].Visibility);
             //Lines
             Assert.IsTrue(xmlObj.Lines.Count > 0);
             Assert.IsNotNull(xmlObj.Lines[0].StartPoint);

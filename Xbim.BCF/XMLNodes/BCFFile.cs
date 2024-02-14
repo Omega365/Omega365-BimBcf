@@ -20,6 +20,7 @@ namespace Xbim.BCF.XMLNodes
                 if (value.Length == 0 || value.Length == 22)
                 {
                     _ifcProject = value;
+                    _ifcProjectConverted = value.Length != 0 ? IfcGuidConverter.FromIfcGuid(value) : Guid.Empty;
                 }
                 else
                 {
@@ -30,6 +31,32 @@ namespace Xbim.BCF.XMLNodes
         public bool ShouldSerializeIfcProject()
         {
             return !string.IsNullOrEmpty(IfcProject);
+        }
+
+        private Guid _ifcProjectConverted;
+        /// <summary>
+        /// IfcGuid Reference to the project to which this topic is related in the IFC file (As System.Guid)
+        /// </summary>
+        [XmlAttribute]
+        public Guid IfcProjectConverted
+        {
+            get { return _ifcProjectConverted; }
+            set
+            {
+                if (value.ToString().Length == 0 || value.ToString().Length == 36)
+                {
+                    _ifcProjectConverted = value;
+                    _ifcProject = value != Guid.Empty ? IfcGuidConverter.ToIfcGuid(value) : String.Empty;
+                }
+                else
+                {
+                    throw new ArgumentException(this.GetType().Name + " - IfcProjectConverted - IfcProjectConverted must be 36 chars exactly");
+                }
+            }
+        }
+        public bool ShouldSerializeIfcProjectConverted()
+        {
+            return !string.IsNullOrEmpty(IfcProjectConverted.ToString());
         }
 
         private String _ifcSpatialStructureElement;
